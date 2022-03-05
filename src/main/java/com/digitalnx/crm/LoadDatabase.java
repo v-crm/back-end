@@ -1,7 +1,9 @@
 package com.digitalnx.crm;
 
-import com.digitalnx.crm.api.order.CustomerOrder;
-import com.digitalnx.crm.api.order.CustomerOrderRepository;
+import com.digitalnx.crm.api.order.ProductOrderRepository;
+import com.digitalnx.crm.api.order.customerproductorder.CustomerProductOrder;
+import com.digitalnx.crm.api.order.customerproductorder.CustomerOrderRepository;
+import com.digitalnx.crm.api.order.ProductOrder;
 import com.digitalnx.crm.api.product.Product;
 import com.digitalnx.crm.api.product.ProductRepository;
 import com.digitalnx.crm.api.product.productproperty.ProductProperty;
@@ -13,13 +15,12 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Configuration
 class LoadDatabase {
     @Bean
-    CommandLineRunner initDatabase(UserRepository userRepository, ProductRepository productRepo, CustomerOrderRepository customerOrderRepository, ProductPropertyRepository productPropertyRepository) {
+    CommandLineRunner initDatabase(ProductOrderRepository orderRepository, UserRepository userRepository, ProductRepository productRepo, CustomerOrderRepository customerOrderRepository, ProductPropertyRepository productPropertyRepository) {
         return args -> {
             productRepo.deleteAll();
             customerOrderRepository.deleteAll();
@@ -36,20 +37,25 @@ class LoadDatabase {
             properties.add(property);
             properties.add(property2);
 
-            Product p1 = new Product("Soap1", 100000,"Rial", 0, "asdasd", properties);
-            Product p2 = new Product("Soap2", 200000, "Rial", 0, "asdasd");
+            Product product = new Product("Soap1", 100000,"Rial", 0, "asdasd", properties);
+            Product product2 = new Product("Soap2", 200000, "Rial", 0, "asdasd");
 
-            productPropertyRepository.save(property);
-            productPropertyRepository.save(property2);
-            productRepo.save(p1);
-            productRepo.save(p2);
+           productPropertyRepository.save(property);
+           productPropertyRepository.save(property2);
+           productRepo.save(product);
+           productRepo.save(product2);
 
-            CustomerOrder o1 = new CustomerOrder();
-            Set<Product> products = new HashSet<>();
-            products.add(p1);
-            products.add(p2);
-            o1.setProduct(products);
-            customerOrderRepository.save(o1);
+            ProductOrder order1 = new ProductOrder(product, 5,"");
+            ProductOrder order2 = new ProductOrder(product2, 2,"");
+            orderRepository.save(order1);
+            orderRepository.save(order2);
+
+            Set<ProductOrder> orders = new HashSet<>();
+            orders.add(order1);
+            orders.add(order2);
+            CustomerProductOrder customerOrder1 = new CustomerProductOrder(user, orders, new Date());
+
+            customerOrderRepository.save(customerOrder1);
         };
     }
 }

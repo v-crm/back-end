@@ -1,4 +1,4 @@
-package com.digitalnx.crm.api.order;
+package com.digitalnx.crm.api.order.customerproductorder;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/order")
 public class CustomerOrderController {
     @Autowired
-    CustomerOrderRepository orderRepository;
+    CustomerOrderRepository customerOrderRepository;
 
     @GetMapping("/all")
-    Iterable<CustomerOrder> allOrders() {
-        return orderRepository.findAll();
+    Iterable<CustomerProductOrder> allOrders() {
+        return customerOrderRepository.findAll();
     }
 }

@@ -1,10 +1,5 @@
 package com.digitalnx.crm.api.product.productproperty;
 
-import com.digitalnx.crm.api.order.CustomerOrder;
-import com.digitalnx.crm.api.product.Product;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 import javax.persistence.*;
 
 @Entity
