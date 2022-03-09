@@ -40,10 +40,10 @@ class LoadDatabase {
             Product product = new Product("Soap1", 100000,"Rial", 0, "asdasd", properties);
             Product product2 = new Product("Soap2", 200000, "Rial", 0, "asdasd");
 
-           productPropertyRepository.save(property);
-           productPropertyRepository.save(property2);
-           productRepo.save(product);
-           productRepo.save(product2);
+            productPropertyRepository.save(property);
+            productPropertyRepository.save(property2);
+            productRepo.save(product);
+            productRepo.save(product2);
 
             ProductOrder order1 = new ProductOrder(product, 5,"");
             ProductOrder order2 = new ProductOrder(product2, 2,"");

@@ -32,7 +32,5 @@ build/
 ### VS Code ###
 .vscode/
 *~
-.mvn/
-
 db_seed.sql
 
