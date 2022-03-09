@@ -1,15 +1,19 @@
-package com.digitalnx.crm.api.user;
+package com.digitalnx.crm.api.user.user;
+import com.digitalnx.crm.api.user.userrole.UserRole;
+
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
 @Entity
 public class User {
     public User() {}
 
-    public User(String firstname, String surname, String password, UserRole userRole, String postalAddress, String city, String phoneNumber, int postalCode) {
+    public User(String firstname, String surname, String username, String password, String postalAddress, String city, String phoneNumber, int postalCode) {
         this.firstname = firstname;
         this.surname = surname;
+        this.username = username;
         this.password = password;
-        this.userRole = userRole;
         this.postalAddress = postalAddress;
         this.city = city;
         this.phoneNumber = phoneNumber;
@@ -22,12 +26,15 @@ public class User {
 
     private String firstname;
     private String surname;
+    private String username;
     private String password;
-    private UserRole userRole;
     private String postalAddress;
     private String city;
     private String phoneNumber;
     private int postalCode;
+
+    @ManyToMany(fetch=FetchType.EAGER)
+    private Collection<UserRole>  userRoles = new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -53,16 +60,28 @@ public class User {
         this.surname = surname;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
     public void setPassword(String password) {
         this.password = password;
     }
 
-    public UserRole getUserRole() {
-        return userRole;
+    public Collection<UserRole> getUserRoles() {
+        return userRoles;
     }
 
-    public void setUserRole(UserRole userRole) {
-        this.userRole = userRole;
+    public void setUserRoles(Collection<UserRole> userRoles) {
+        this.userRoles = userRoles;
     }
 
     public String getPostalAddress() {

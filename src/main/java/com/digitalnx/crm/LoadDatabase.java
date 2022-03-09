@@ -8,9 +8,10 @@ import com.digitalnx.crm.api.product.Product;
 import com.digitalnx.crm.api.product.ProductRepository;
 import com.digitalnx.crm.api.product.productproperty.ProductProperty;
 import com.digitalnx.crm.api.product.productproperty.ProductPropertyRepository;
-import com.digitalnx.crm.api.user.User;
-import com.digitalnx.crm.api.user.UserRepository;
-import com.digitalnx.crm.api.user.UserRole;
+import com.digitalnx.crm.api.user.UserService;
+import com.digitalnx.crm.api.user.user.User;
+import com.digitalnx.crm.api.user.user.UserRepository;
+import com.digitalnx.crm.api.user.userrole.UserRole;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,15 +21,24 @@ import java.util.*;
 @Configuration
 class LoadDatabase {
     @Bean
-    CommandLineRunner initDatabase(ProductOrderRepository orderRepository, UserRepository userRepository, ProductRepository productRepo, CustomerOrderRepository customerOrderRepository, ProductPropertyRepository productPropertyRepository) {
+    CommandLineRunner initDatabase(UserService userService, ProductOrderRepository orderRepository, UserRepository userRepository, ProductRepository productRepo, CustomerOrderRepository customerOrderRepository, ProductPropertyRepository productPropertyRepository) {
         return args -> {
             productRepo.deleteAll();
             customerOrderRepository.deleteAll();
             productPropertyRepository.deleteAll();
             userRepository.deleteAll();
 
-            User user = new User("Iman", "F.", "password", UserRole.ADMIN, "0000000", "Ahvaz", "91000000", 0000000);
-            userRepository.save(user);
+            userService.saveUserRole(new UserRole("ADMIN"));
+            userService.saveUserRole(new UserRole("MANAGER"));
+            userService.saveUserRole(new UserRole("USER"));
+            User user = new User("Iman", "F.", "imanfa", "password", "0000000", "Ahvaz", "91000000", 0000000);
+            userService.saveUser(user);
+            userService.saveUser(new User("Mamad", "Rez", "mmd", "password", "0000000", "Ghale", "91000000", 0000000));
+
+            userService.addRoleToUser("imanfa", "ADMIN");
+            userService.addRoleToUser("imanfa", "USER");
+
+            userService.addRoleToUser("mmd", "USER");
 
             ProductProperty property = new ProductProperty("Cleansing");
             ProductProperty property2 = new ProductProperty("Anti jush");

@@ -1,6 +1,6 @@
 package com.digitalnx.crm.api.order.customerproductorder;
 
-import com.digitalnx.crm.api.user.User;
+import com.digitalnx.crm.api.user.user.User;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

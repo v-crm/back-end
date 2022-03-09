@@ -1,31 +1,44 @@
 package com.digitalnx.crm.api.user;
 
+import com.digitalnx.crm.api.user.user.User;
+import com.digitalnx.crm.api.user.userrole.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
+import java.util.List;
 
 @RestController
-@RequestMapping("/user")
 public class UserController {
     @Autowired
-    private UserRepository userRepository;
+    private final UserService userService;
 
-    @PostMapping("/add")
-    public @ResponseBody String addUser(@RequestParam String firstname,
-                   @RequestParam String surname,
-                   @RequestParam String password,
-                   @RequestParam String userRole,
-                   @RequestParam String postalAddress,
-                   @RequestParam String city,
-                   @RequestParam String phoneNumber,
-                   @RequestParam int postalCode) {
-        User u = new User(firstname, surname, password, UserRole.CUSTOMER, postalAddress, city, phoneNumber, postalCode);
-        userRepository.save(u);
-        return "Saved";
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
-    @GetMapping("/all")
-    public @ResponseBody
-    Iterable<User> allUsers() {
-        return userRepository.findAll();
+    @PostMapping("/user/save")
+    public ResponseEntity<User> saveUser(@RequestBody User user) {
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/save").toUriString());
+        return ResponseEntity.created(uri).body(userService.saveUser(user));
+    }
+
+    @GetMapping("/users")
+    public ResponseEntity<List<User>> getUsers() {
+        return ResponseEntity.ok().body(userService.getUsers());
+    }
+
+    @PostMapping("/role/save")
+    public ResponseEntity<UserRole> saveRole(@RequestBody UserRole userRole) {
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/role/save").toUriString());
+        return ResponseEntity.created(uri).body(userService.saveUserRole(userRole));
+    }
+
+    @PostMapping("/role/assign_to_user")
+    public ResponseEntity<?> saveRole(@RequestBody String username, @RequestBody String role) {
+        userService.addRoleToUser(username, role);
+        return ResponseEntity.ok().build();
     }
 }
