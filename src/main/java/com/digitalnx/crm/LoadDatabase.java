@@ -12,6 +12,8 @@ import com.digitalnx.crm.api.user.UserService;
 import com.digitalnx.crm.api.user.user.User;
 import com.digitalnx.crm.api.user.user.UserRepository;
 import com.digitalnx.crm.api.user.userrole.UserRole;
+import com.digitalnx.crm.api.ui.UI;
+import com.digitalnx.crm.api.ui.UIRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,8 +23,17 @@ import java.util.*;
 @Configuration
 class LoadDatabase {
     @Bean
-    CommandLineRunner initDatabase(UserService userService, ProductOrderRepository orderRepository, UserRepository userRepository, ProductRepository productRepo, CustomerOrderRepository customerOrderRepository, ProductPropertyRepository productPropertyRepository) {
+    CommandLineRunner initDatabase(UserService userService,
+                                   ProductOrderRepository orderRepository,
+                                   UserRepository userRepository,
+                                   ProductRepository productRepo,
+                                   CustomerOrderRepository customerOrderRepository,
+                                   ProductPropertyRepository productPropertyRepository,
+                                   UIRepository uiRepository) {
         return args -> {
+            UI ui = new UI( "صابون های ذستساز ایرات صابون", null, "black", "white", "FA", "ASD", "123", null);
+            uiRepository.save(ui);
+
             productRepo.deleteAll();
             customerOrderRepository.deleteAll();
             productPropertyRepository.deleteAll();
