@@ -6,6 +6,6 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface CustomerOrderRepository extends CrudRepository<CustomerProductOrder, Integer> {
+public interface CustomerProductOrderRepository extends CrudRepository<CustomerProductOrder, Integer> {
     List<CustomerProductOrder> findByUser(Optional<User> user);
 }

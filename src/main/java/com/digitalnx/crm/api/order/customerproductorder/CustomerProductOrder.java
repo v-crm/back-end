@@ -11,8 +11,8 @@ import java.util.Set;
 public class CustomerProductOrder {
     public CustomerProductOrder() {}
 
-    public CustomerProductOrder(User user, Set<ProductOrder> orders, Date date ) {
-        this.date = date;
+    public CustomerProductOrder(User user, Set<ProductOrder> orders) {
+        this.date = new Date();
         this.orders = orders;
         this.user = user;
     }
@@ -24,7 +24,7 @@ public class CustomerProductOrder {
     @Temporal(value= TemporalType.TIMESTAMP)
     private Date date;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     Set<ProductOrder> orders;
 
     @OneToOne

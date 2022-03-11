@@ -9,16 +9,17 @@ import java.util.Set;
 public class Product {
     public Product() {}
 
-    public Product(String name, int price, String priceUnit, int discount, String description, Set<ProductProperty> properties) {
+    public Product(String name, int price, int unitsInStock, String priceUnit, int discount, String description, Set<ProductProperty> properties) {
         this.name = name;
         this.price = price;
+        this.unitsInStock = unitsInStock;
         this.priceUnit = priceUnit;
         this.discount = discount;
         this.description = description;
         this.properties = properties;
     }
-    public Product(String name, int price, String priceUnit,int discount, String description) {
-        this(name, price, priceUnit, discount, description, new HashSet<>());
+    public Product(String name, int price, int unitsInStock, String priceUnit, int discount, String description) {
+        this(name, price, unitsInStock, priceUnit, discount, description, new HashSet<>());
     }
 
     @Id
@@ -30,6 +31,7 @@ public class Product {
     private int discount;
     private String description;
     private int unitsInStock;
+    private int quantities;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private Set<ProductProperty> properties;
