@@ -7,22 +7,32 @@ import com.digitalnx.crm.api.product.ProductRepository;
 import com.digitalnx.crm.api.user.user.User;
 import com.digitalnx.crm.api.user.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import javax.persistence.*;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
-@Entity
-public class CustomerProductOrder {
-    public CustomerProductOrder() {}
+@Service
+public class CustomerProductOrderService {
 
-    public CustomerProductOrder(CustomerOrderPostRequest customerOrderPostRequest,
-                                ProductOrderRepository productOrderRepository,
-                                UserRepository userRepository,
-                                ProductRepository productRepository
-                                ) {
+    @Autowired
+    CustomerProductOrderRepository customerProductOrderRepository;
+    @Autowired
+    ProductOrderRepository productOrderRepository;
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    ProductRepository productRepository;
+
+    public List<CustomerProductOrder> getOrders() {
+        return customerProductOrderRepository.findAll();
+    }
+
+    public List<CustomerProductOrder> getOrdersFromAUser(Integer id) {
+        Optional<User> user = userRepository.findById(id);
+        return customerProductOrderRepository.findByUser(user);
+    }
+
+    public void newOrder (CustomerOrderPostRequest customerOrderPostRequest) {
         Optional<User> optUser = userRepository.findById(customerOrderPostRequest.getUserId());
         if (optUser.isEmpty()) throw new RuntimeException("User not found!");
         optUser.ifPresentOrElse(
@@ -48,59 +58,16 @@ public class CustomerProductOrder {
                                         });
                             });
 
-                    this.date = new Date();
-                    this.orders = productOrders;
-                    this.user = user;
+                    var customerProductOrder = new CustomerProductOrder();
+                    customerProductOrder.setDate(new Date());
+                    customerProductOrder.setOrders(productOrders);
+                    customerProductOrder.setUser(user);
+
+                    customerProductOrderRepository.save(customerProductOrder);
                 },
                 () -> {
                     throw new RuntimeException("User not found!");
                 }
         );
-
-    }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer Id;
-
-    @Temporal(value= TemporalType.TIMESTAMP)
-    private Date date;
-
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    Set<ProductOrder> orders;
-
-    @OneToOne
-    private User user;
-
-    public void setId(Integer id) {
-        Id = id;
-    }
-
-    public Integer getId() {
-        return Id;
-    }
-
-    public Set<ProductOrder> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(Set<ProductOrder> orders) {
-        this.orders = orders;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 }

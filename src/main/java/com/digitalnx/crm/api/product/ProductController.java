@@ -1,21 +1,29 @@
 package com.digitalnx.crm.api.product;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class ProductController {
     @Autowired
-    private ProductRepository productRepository;
+    private ProductService productService;
 
-    @GetMapping(path="/products")
-    public @ResponseBody
-    Iterable<Product> getAllProducts() {
-        return productRepository.findAll();
+    @PostMapping("/product")
+    public Product addProduct(@RequestBody Product product) {
+        return productService.addProduct(product);
     }
 
-    @PostMapping(path="/product")
-    public @ResponseBody String addProduct (@RequestParam String name, @RequestParam int price) {
-        return "Saved";
+    @GetMapping(path="/products")
+    public List<Product> getAllProducts() {
+        return productService.getProducts();
+    }
+
+    @DeleteMapping("/product/{id}")
+    void updateProduct(@PathVariable Integer id){
+        productService.deleteProduct(id);
     }
 }

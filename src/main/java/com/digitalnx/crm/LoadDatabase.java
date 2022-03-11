@@ -27,7 +27,6 @@ class LoadDatabase {
                                    ProductOrderRepository orderRepository,
                                    UserRepository userRepository,
                                    ProductRepository productRepo,
-                                   CustomerProductOrderRepository customerOrderRepository,
                                    ProductPropertyRepository productPropertyRepository,
                                    UIRepository uiRepository) {
         return args -> {
@@ -35,7 +34,6 @@ class LoadDatabase {
             uiRepository.save(ui);
 
             productRepo.deleteAll();
-            customerOrderRepository.deleteAll();
             productPropertyRepository.deleteAll();
             userRepository.deleteAll();
 
@@ -70,13 +68,6 @@ class LoadDatabase {
             ProductOrder order2 = new ProductOrder(product2, 2,"");
             orderRepository.save(order1);
             orderRepository.save(order2);
-
-            Set<ProductOrder> orders = new HashSet<>();
-            orders.add(order1);
-            orders.add(order2);
-            CustomerProductOrder customerOrder1 = new CustomerProductOrder(user, orders);
-
-            customerOrderRepository.save(customerOrder1);
         };
     }
 }
