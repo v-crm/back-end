@@ -14,6 +14,7 @@ import com.digitalnx.crm.api.user.user.UserRepository;
 import com.digitalnx.crm.api.user.userrole.UserRole;
 import com.digitalnx.crm.api.ui.UI;
 import com.digitalnx.crm.api.ui.UIRepository;
+import com.digitalnx.crm.api.user.userrole.UserRoleRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,18 +25,16 @@ import java.util.*;
 class LoadDatabase {
     @Bean
     CommandLineRunner initDatabase(UserService userService,
+                                   CustomerProductOrderRepository customerProductOrderRepository,
                                    ProductOrderRepository orderRepository,
                                    UserRepository userRepository,
-                                   ProductRepository productRepo,
+                                   UserRoleRepository userRoleRepository,
+                                   ProductRepository productRepository,
                                    ProductPropertyRepository productPropertyRepository,
                                    UIRepository uiRepository) {
         return args -> {
             UI ui = new UI( "صابون های ذستساز ایرات صابون", null, "black", "white", "FA", "ASD", "123", null);
             uiRepository.save(ui);
-
-            productRepo.deleteAll();
-            productPropertyRepository.deleteAll();
-            userRepository.deleteAll();
 
             userService.saveUserRole(new UserRole("ADMIN"));
             userService.saveUserRole(new UserRole("MANAGER"));
@@ -44,10 +43,12 @@ class LoadDatabase {
             userService.saveUser(user);
             userService.saveUser(new User("Mamad", "Rez", "mmd", "password", "0000000", "Ghale", "91000000", 0000000));
 
-            userService.addRoleToUser("imanfa", "ADMIN");
-            userService.addRoleToUser("imanfa", "USER");
-
-            userService.addRoleToUser("mmd", "USER");
+            try {
+                userService.addRoleToUser(1, "ADMIN");
+                userService.addRoleToUser(1, "USER");
+            } catch(Exception e) {
+                System.out.println(e.getMessage());
+            }
 
             ProductProperty property = new ProductProperty("Cleansing");
             ProductProperty property2 = new ProductProperty("Anti jush");
@@ -61,8 +62,8 @@ class LoadDatabase {
 
             productPropertyRepository.save(property);
             productPropertyRepository.save(property2);
-            productRepo.save(product);
-            productRepo.save(product2);
+            productRepository.save(product);
+            productRepository.save(product2);
 
             ProductOrder order1 = new ProductOrder(product, 5,"");
             ProductOrder order2 = new ProductOrder(product2, 2,"");

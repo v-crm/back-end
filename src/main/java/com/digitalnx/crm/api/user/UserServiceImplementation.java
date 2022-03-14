@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImplementation implements UserService, UserDetailsService {
@@ -57,6 +58,20 @@ public class UserServiceImplementation implements UserService, UserDetailsServic
         userRepository.save(user);
     }
 
+    @Override
+    public void addRoleToUser(Integer id, String roleName) {
+        Optional<User> userOptional = userRepository.findById(id);
+        UserRole role = userRoleRepository.findByName(roleName);
+        userOptional.ifPresentOrElse(
+                (user) -> {
+                        user.getUserRoles().add(role);
+                        userRepository.save(user);
+                    },
+                () -> {
+                    throw new RuntimeException("User ID not found.");
+                }
+        );
+    }
     @Override
     public User getUser(String username) {
         return userRepository.findByUsername(username);

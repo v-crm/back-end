@@ -66,7 +66,7 @@ public class CustomerProductOrder {
     @Temporal(value= TemporalType.TIMESTAMP)
     private Date date;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     Set<ProductOrder> orders;
 
     @OneToOne
